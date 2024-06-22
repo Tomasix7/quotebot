@@ -7,6 +7,9 @@ const bot = new TelegramBot(process.env.ROONEYKEY, {polling: true});
 const CHAT_ID = process.env.CHATID;
 const UNSPLASH_ACCESS_KEY = process.env.UNSKEY;
 
+// debug 1
+console.log('Bot started');
+
 // Функция для получения случайной цитаты
 async function getRandomQuote() {
   try {
@@ -37,44 +40,29 @@ async function getRandomImage() {
   }
 }
 
-// Функция для отправки цитаты
-async function sendQuote() {
+// Функция для отправки цитаты и изображения
+async function sendQuoteAndImage() {
   try {
     const quote = await getRandomQuote();
-    await bot.sendMessage(CHAT_ID, quote);
-    console.log('Цитата отправлена успешно');
-  } catch (error) {
-    console.error('Ошибка при отправке цитаты:', error);
-    bot.sendMessage(CHAT_ID, 'Извините, произошла ошибка при отправке цитаты.');
-  }
-}
-
-// Функция для отправки изображения
-async function sendImage() {
-  try {
     const image = await getRandomImage();
+
     if (image) {
       await bot.sendPhoto(CHAT_ID, image.url, {
-        caption: image.description
+        caption: `${quote}\n\n${image.description}`
       });
-      console.log('Изображение отправлено успешно');
     } else {
-      bot.sendMessage(CHAT_ID, 'Извините, не удалось получить изображение.');
+      await bot.sendMessage(CHAT_ID, quote);
     }
   } catch (error) {
-    console.error('Ошибка при отправке изображения:', error);
-    bot.sendMessage(CHAT_ID, 'Извините, произошла ошибка при отправке изображения.');
+    console.error('Ошибка при отправке сообщения:', error);
+    bot.sendMessage(CHAT_ID, 'Извините, произошла ошибка при отправке сообщения.');
   }
 }
 
-// Расписание для отправки цитат (каждый день в 9:00)
-cron.schedule('0 9 * * *', sendQuote);
-
-// Расписание для отправки изображений
-cron.schedule('45 7 * * *', sendImage);  // 7:45
-cron.schedule('15 12 * * *', sendImage); // 12:15
-cron.schedule('45 17 * * *', sendImage); // 17:45
-cron.schedule('15 20 * * *', sendImage); // 20:15
+// Запуск задачи по расписанию (каждый день в 9:00)
+cron.schedule('0 9 * * *', () => {
+  sendQuoteAndImage();
+});
 
 console.log('Бот запущен и будет отправлять цитаты и изображения по расписанию.');
 
