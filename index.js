@@ -1,6 +1,7 @@
 const TelegramBot = require('node-telegram-bot-api');
 const axios = require('axios');
 const cron = require('node-cron');
+const express = require('express');
 
 // Использование переменных окружения
 const bot = new TelegramBot(process.env.ROONEYKEY, {polling: true});
@@ -74,4 +75,16 @@ bot.on('polling_error', (error) => {
 // Простая команда для проверки работоспособности бота
 bot.onText(/\/start/, (msg) => {
   bot.sendMessage(msg.chat.id, 'Я буду любить тебя ВСЕГДА! ♥️ Твоя Руни');
+});
+
+// Добавьте следующий код в конец файла:
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.get('/', (req, res) => {
+  res.send('Бот работает!');
+});
+
+app.listen(PORT, () => {
+  console.log(`Сервер запущен на порту ${PORT}`);
 });
