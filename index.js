@@ -84,6 +84,6 @@ bot.on('polling_error', (error) => {
 });
 
 // Простая команда для проверки работоспособности бота
-bot.onText(/\/start/, (msg) => {
-  bot.sendMessage(msg.chat.id, 'Бот работает и готов отправлять цитаты и изображения по расписанию!');
+bot.onText(/\/ok/, (msg) => {
+  bot.sendMessage(msg.chat.id, 'Я буду любить тебя ВСЕГДА! ♥️ Твоя Руни');
 });
