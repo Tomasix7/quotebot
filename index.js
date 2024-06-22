@@ -7,6 +7,9 @@ const bot = new TelegramBot(process.env.ROONEYKEY, {polling: true});
 const CHAT_ID = process.env.CHATID;
 const UNSPLASH_ACCESS_KEY = process.env.UNSKEY;
 
+// debug 1
+console.log('Bot started');
+
 // Функция для получения случайной цитаты
 async function getRandomQuote() {
   try {
